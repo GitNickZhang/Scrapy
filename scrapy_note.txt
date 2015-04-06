@@ -1,0 +1,57 @@
+二.Spiders
+    1.通过crawl -a传递参数给构造函数
+        eg:scrapy crawl myspider -a arg=arg
+    2.若有start_urls则默认调用make_requests_from_url()来进行请求；若没有，则可定义start_requests()的方法来进行请求，且start_requests()必须返回可迭代的对象，例如dict，list，tuple。
+        eg:
+            def start_requests(self):
+                return [scrapy.FormRequest("http://www.example.com/login",
+                                            formdata={'user': 'john', 'pass': 'secret'},
+                                            callback=self.logged_in)]
+    3.log()
+        eg:
+            def parse(self, response):
+                self.log('A response from %s just arrived!' % response.url)
+    4.rules:定义爬行规则
+        Rule对象:
+            class scrapy.contrib.spiders.Rule(link_extractor, callback=None, cb_kwargs=None, follow=None, process_links=None, process_request=None)
+            (1).link_extractor：Link_extractor对象定义link的提取规则。
+            (2).callback：设置回调函数。
+            (3).cb_kwargs：设置回调的参数。
+            (4).follow：得到响应之后的请求是否也要遵循该rules。
+            (5).process_links：有待实践。
+            (6).process_request：处理被rules处理过的请求。
+        eg:rules = (
+        # Extract links matching 'category.php' (but not matching 'subsection.php')
+        # and follow links from them (since no callback means follow=True by default).
+        Rule(LinkExtractor(allow=('category\.php', ), deny=('subsection\.php', ))),
+
+        # Extract links matching 'item.php' and parse them with the spider's method parse_item
+        Rule(LinkExtractor(allow=('item\.php', )), callback='parse_item'),
+    )
+三.Request
+    1.基础使用
+        eg:
+            request = Request(
+                url="http://example.com",
+                callback=self.parse_it,
+                headers={
+                'User-Agent': 'Mozilla',
+                },
+                cookies={
+                'passwd': 'sillyB',
+                },
+            )
+    2.meta（有待实践）
+    3.FormRequest
+        eg:
+            return scrapy.FormRequest(
+                url='',
+                formdata={
+                '':'',
+                },
+                callback=self.parse,
+            )
+        from_response():有待实践
+四.Item Loader
+    1.负责填充Item，通过processor进行处理，单个填充进Item用input_processor处理，都填充完后整合到Items用output_processor进行处理。（有待实践）
+    2.意义：对抓取到的Item进行统一的处理，不必将处理混入抓取逻辑中，进而实现分离。
