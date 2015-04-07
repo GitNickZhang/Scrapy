@@ -5,7 +5,12 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+import json
+import codecs
 
 class TestScrapyPipeline(object):
     def process_item(self, item, spider):
+    	f = codecs.open('scrapy_json.json', 'a', encoding='utf-8')
+    	line = json.dumps(dict(item)) + '\n'
+    	f.write(line.decode('unicode_escape')) 
         return item
