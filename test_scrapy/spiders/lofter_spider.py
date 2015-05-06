@@ -3,7 +3,7 @@
 import scrapy
 from test_scrapy.items import TestScrapyItem
 from bs4 import BeautifulSoup
-import json
+from scrapy.contrib.exporter import JsonItemExporter
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -32,5 +32,4 @@ class LofterSpider(scrapy.Spider):
 		# 	item['content'] = content
 		# 	items.append(item)
 		# 	print content
-
 		return items

@@ -2,7 +2,7 @@
 import scrapy
 
 
-class TestSpider(scrapy.Spider):
+class testspider(scrapy.spider):
     name = "test" # spider's id
     allowed_domains = ["tuotuozyx.com"]
     start_urls = (
@@ -10,4 +10,5 @@ class TestSpider(scrapy.Spider):
     )
 
     def parse(self, response):
-   	    pass
+        pass
+
